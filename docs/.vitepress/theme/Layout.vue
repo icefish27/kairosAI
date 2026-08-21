@@ -4,6 +4,7 @@ import PostLayout from './components/PostLayout.vue'
 import LinkLayout from './components/LinkLayout.vue'
 import NotFound from './components/NotFound.vue'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { SITE_CONFIG } from './site.config'
 
 const { frontmatter } = useData()
 const route = useRoute()
@@ -17,7 +18,7 @@ function applyDark(v: boolean) {
 }
 onMounted(() => {
   const saved = localStorage.getItem('theme')
-  isDark.value = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+  isDark.value = saved ? saved === 'dark' : false
   applyDark(isDark.value)
 })
 function toggleDark() {
@@ -26,16 +27,11 @@ function toggleDark() {
   applyDark(isDark.value)
 }
 
-// 顶导航项
-const navItems = [
-  { text: '首页', link: withBase('/') },
-  { text: 'AI 时间线', link: withBase('/timeline') },
-  { text: '深度解析', link: withBase('/deep') },
-  { text: '文章列表', link: withBase('/articles') }
-]
-
-// GitHub 仓库地址
-const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
+// 导航项和 GitHub 地址从 site.config.ts 统一管理
+const navItems = SITE_CONFIG.navItems.map((i) => ({ text: i.text, link: withBase(i.link) }))
+const GITHUB_URL = SITE_CONFIG.githubUrl
+const ICP = SITE_CONFIG.icp
+const COPYRIGHT = SITE_CONFIG.copyright
 
 // 移动端菜单
 const mobileOpen = ref(false)
@@ -128,8 +124,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
         </div>
       </div>
       <div class="container footer-bottom">
-        <span>© 2026 AI 资讯站</span>
-        <span class="footer-icp">京ICP备xxxx号</span>
+        <span>{{ COPYRIGHT }}</span>
+        <span v-if="ICP" class="footer-icp">{{ ICP }}</span>
       </div>
     </footer>
   </div>

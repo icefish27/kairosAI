@@ -6,6 +6,7 @@ import type { Post } from './posts.data'
 // 与 posts.data（原创）分离，两份数据各服务各页面
 export default createContentLoader('daily/*.md', {
   excerpt: true,
+  // @ts-ignore — VitePress 1.6 类型定义未声明 excerptSeparator，运行时支持
   excerptSeparator: '<!-- more -->',
   async transform(raw) {
     return raw
@@ -18,7 +19,12 @@ export default createContentLoader('daily/*.md', {
 
         const tags = fm.tags || []
         const slug = p.url.replace(/^\/daily\//, '').replace(/\/$/, '')
-        const dateStr = fm.date ? String(fm.date).split('T')[0] : ''
+        const rawDate = fm.date
+        const dateStr = rawDate
+          ? (rawDate instanceof Date
+            ? `${rawDate.getFullYear()}-${String(rawDate.getMonth() + 1).padStart(2, '0')}-${String(rawDate.getDate()).padStart(2, '0')}`
+            : String(rawDate).split('T')[0])
+          : ''
 
         return {
           title: fm.title || '无标题',

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
-const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
+import { SITE_CONFIG } from '../site.config'
+const GITHUB_URL = SITE_CONFIG.githubUrl
 </script>
 
 <template>

@@ -27,6 +27,7 @@ export interface Post {
 // 构建期扫描 posts/*.md，产出全站文章元数据数组
 export default createContentLoader('posts/*.md', {
   excerpt: true,
+  // @ts-ignore — VitePress 1.6 类型定义未声明 excerptSeparator，运行时支持
   excerptSeparator: '<!-- more -->',
   async transform(raw) {
     const root = path.resolve(process.cwd(), 'docs')
@@ -44,7 +45,7 @@ export default createContentLoader('posts/*.md', {
           // 字数：读正文（去掉 frontmatter、代码块、markdown 标记）后的字符数
           let wordCount = 0
           try {
-            const full = fs.readFileSync(path.resolve(root, p.src), 'utf-8')
+            const full = fs.readFileSync(path.resolve(root, p.src || ''), 'utf-8')
             const body = full
               .replace(/^---[\s\S]*?---/, '')
               .replace(/```[\s\S]*?```/g, '')
@@ -58,7 +59,12 @@ export default createContentLoader('posts/*.md', {
           const tags = fm.tags || []
           const summary: string = fm.summary || p.excerpt || ''
           const slug = p.url.replace(/^\/posts\//, '').replace(/\/$/, '')
-          const dateStr = fm.date ? String(fm.date).split('T')[0] : ''
+          const rawDate = fm.date
+          const dateStr = rawDate
+            ? (rawDate instanceof Date
+              ? `${rawDate.getFullYear()}-${String(rawDate.getMonth() + 1).padStart(2, '0')}-${String(rawDate.getDate()).padStart(2, '0')}`
+              : String(rawDate).split('T')[0])
+            : ''
 
           return {
             title: fm.title || '无标题',

@@ -1,3 +1,5 @@
+import type * as THREE from 'three'
+
 // 文章正文自定义块（mermaid/echarts/three）的客户端渲染器
 // fence 在 SSR 期输出 <div class="vp-block" data-lang="..."><pre>源码</pre></div>，
 // 本模块在客户端 onMounted 扫描这些占位，按需 dynamic import 对应库并渲染。

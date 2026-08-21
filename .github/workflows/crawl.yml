@@ -1,11 +1,25 @@
+# ──────────────────────────────────────────────────────────────────
+# 爬虫工作流：每天定时从 ai-bot.cn 抓取 AI 资讯快讯，写入 docs/daily/
+# ──────────────────────────────────────────────────────────────────
+# 触发时间：每天 UTC 0:00（北京时间 08:00）
+# 数据源：  ai-bot.cn/daily-ai-news（在 scripts/crawl-ai-bot.ts 顶部 CRAWL_CONFIG 配置）
+# 输出：    docs/daily/YYYY-MM-DD-{slug}.md
+# 去重：    读取 docs/daily/ 已有 sourceUrl，命中则跳过
+# 注意：    GitHub cron 不保证准时，可能延迟数分钟~数十分钟
+# ──────────────────────────────────────────────────────────────────
 name: Crawl daily news
 
 on:
   schedule:
-    # UTC 0:00 ≈ 北京 08:00（GitHub cron 不保证准时，可能延迟数分钟~数十分钟）
+    # cron 格式：分 时 日 月 周（均为 UTC 时间）
+    # '0 0 * * *' = 每天 UTC 0:00 ≈ 北京时间 08:00
+    # 如需改频次，例如改为每天 UTC 2:00（北京 10:00），改为 '0 2 * * *'
+    # 如需每天两次，加一行：- cron: '0 12 * * *'
     - cron: '0 0 * * *'
+  # 支持在 GitHub Actions 页面手动触发
   workflow_dispatch: {}
 
+# 爬虫需要写入仓库（commit & push 新快讯）
 permissions:
   contents: write
 
@@ -13,14 +27,25 @@ jobs:
   crawl:
     runs-on: ubuntu-latest
     steps:
+      # 1. 检出代码到 CI 环境
       - name: Checkout
         uses: actions/checkout@v5
+
+      # 2. 安装 Node.js 22
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
+
+      # 3. 执行爬虫脚本：抓取 ai-bot.cn，生成 docs/daily/*.md
+      #    使用 tsx 运行 TypeScript（npm ci 已安装 devDependencies）
+      - name: Install dependencies
+        run: npm ci
       - name: Run crawler
-        run: node scripts/crawl-ai-bot.mjs
+        run: npx tsx scripts/crawl-ai-bot.ts
+
+      # 4. 如果有新快讯，commit 并 push 回 main 分支（push 后自动触发 deploy.yml 部署）
       - name: Commit & push if new
         run: |
           git config user.name "github-actions[bot]"

@@ -1,3 +1,4 @@
+// @ts-ignore — VitePress 构建期为 .data 文件生成 data 导出，源码中仅有 default export
 import { data } from '../daily.data'
 import { computed } from 'vue'
 import type { Post } from '../posts.data'

@@ -1,6 +1,7 @@
 import type { Theme } from 'vitepress'
 import Layout from './Layout.vue'
 
+import 'element-plus/dist/index.css'
 import './styles/index.css'
 import './styles/prose.css'
 
