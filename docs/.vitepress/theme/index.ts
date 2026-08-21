@@ -16,6 +16,8 @@ import ArticleList from './components/ArticleList.vue'
 import ArticleCard from './components/ArticleCard.vue'
 import Timeline from './components/Timeline.vue'
 import PostLayout from './components/PostLayout.vue'
+import LinkLayout from './components/LinkLayout.vue'
+import NotFound from './components/NotFound.vue'
 import ParticlesBg from './components/ParticlesBg.vue'
 import Mermaid from './components/Mermaid.vue'
 import EChart from './components/EChart.vue'
@@ -37,11 +39,13 @@ export default {
       ArticleCard,
       Timeline,
       PostLayout,
+      LinkLayout,
       ParticlesBg,
       Mermaid,
       EChart,
       ThreeBlock,
-      SearchButton
+      SearchButton,
+      NotFound
     }
     for (const [name, comp] of Object.entries(comps)) {
       app.component(name, comp)

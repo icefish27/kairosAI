@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 import PostLayout from './components/PostLayout.vue'
-import { ref, onMounted, onUnmounted } from 'vue'
+import LinkLayout from './components/LinkLayout.vue'
+import NotFound from './components/NotFound.vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const { frontmatter } = useData()
+const route = useRoute()
+// 404 检测：VitePress 在 not-found 页 route.data.relativePath 为 '404.html'
+const isNotFound = computed(() => route.data.relativePath === '404.html')
 
 // 暗色模式（自定义主题自行管理 html.dark class）
 const isDark = ref(false)
@@ -25,11 +30,12 @@ function toggleDark() {
 const navItems = [
   { text: '首页', link: '/' },
   { text: 'AI 时间线', link: '/timeline' },
+  { text: '深度解析', link: '/deep' },
   { text: '文章列表', link: '/articles' }
 ]
 
-// GitHub 仓库地址（用户后续建仓库后替换）
-const GITHUB_URL = 'https://github.com/your-name/ai-news-site'
+// GitHub 仓库地址
+const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
 
 // 移动端菜单
 const mobileOpen = ref(false)
@@ -85,7 +91,9 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
     <!-- 内容区：自定义主题用全局 <Content/> 组件渲染当前页 markdown 内容 -->
     <main class="main">
-      <PostLayout v-if="frontmatter.layout === 'post'">
+      <NotFound v-if="isNotFound" />
+      <LinkLayout v-else-if="frontmatter.layout === 'link'" />
+      <PostLayout v-else-if="frontmatter.layout === 'post'">
         <Content />
       </PostLayout>
       <Content v-else />

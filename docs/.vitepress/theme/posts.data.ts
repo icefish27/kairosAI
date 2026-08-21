@@ -19,6 +19,9 @@ export interface Post {
   wordCount: number
   readingTime: number
   slug: string
+  type: 'link' | 'original'
+  source?: string
+  sourceUrl?: string
 }
 
 // 构建期扫描 posts/*.md，产出全站文章元数据数组
@@ -73,7 +76,10 @@ export default createContentLoader('posts/*.md', {
             excerpt: p.excerpt || summary,
             wordCount,
             readingTime: Math.max(1, Math.ceil(wordCount / 300)),
-            slug
+            slug,
+            type: 'original',
+            source: fm.source || '',
+            sourceUrl: fm.sourceUrl || ''
           } as Post
         })
         .filter((p) => !!p.date)

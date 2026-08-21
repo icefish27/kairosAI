@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { usePosts } from '../composables/usePosts'
+import { useDaily } from '../composables/useDaily'
 import { ref, computed } from 'vue'
 import type { Post } from '../posts.data'
 
-const { posts, tags, categories } = usePosts()
+const props = defineProps<{ source?: 'daily' | 'posts' }>()
+const isDaily = computed(() => props.source !== 'posts')
+
+// 数据源按 source 切换：daily=爬虫聚合快讯，posts=原创深度
+const dailyData = useDaily()
+const postData = usePosts()
+const posts = computed(() => (isDaily.value ? dailyData.posts.value : postData.posts.value))
+const tags = computed(() => (isDaily.value ? dailyData.tags.value : postData.tags.value))
+const categories = computed(() => (isDaily.value ? dailyData.categories.value : postData.categories.value))
 
 const selectedYears = ref<string[]>([])
 const selectedTags = ref<string[]>([])
@@ -125,13 +134,24 @@ const fmt = (d: string) => d.slice(5)
         <div class="month-head">
           <span class="dot" />{{ g.year }} 年 {{ g.month }} 月 · {{ g.items.length }} 篇
         </div>
-        <a v-for="p in g.items" :key="p.url" class="tcard" :href="p.url">
+        <a
+          v-for="p in g.items"
+          :key="p.url"
+          class="tcard"
+          :href="isDaily ? p.sourceUrl : p.url"
+          :target="isDaily ? '_blank' : undefined"
+          rel="noopener"
+        >
           <div class="tcard-date">{{ fmt(p.date) }}</div>
           <div class="tcard-main">
-            <h3 class="tcard-title">{{ p.title }}</h3>
+            <div class="tcard-title-row">
+              <h3 class="tcard-title">{{ p.title }}</h3>
+              <span v-if="isDaily" class="tcard-ext">↗</span>
+            </div>
             <p class="tcard-summary">{{ p.summary }}</p>
             <div class="tcard-tags">
               <span class="badge">{{ p.category }}</span>
+              <span v-if="isDaily && p.source" class="source">来源：{{ p.source }}</span>
               <span v-for="t in p.tags" :key="t" class="tag">#{{ t }}</span>
             </div>
           </div>

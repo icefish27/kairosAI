@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const GITHUB_URL = 'https://github.com/your-name/ai-news-site'
+const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
 </script>
 
 <template>
