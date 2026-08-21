@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
 </script>
 
@@ -10,7 +11,7 @@ const GITHUB_URL = 'https://github.com/icefish27/kairosAI'
         <p>第一时间获取大模型与 AI 行业前沿动态</p>
       </div>
       <div class="cta-btns">
-        <a class="btn primary" href="/rss.xml">RSS 订阅</a>
+        <a class="btn primary" :href="withBase('/rss.xml')">RSS 订阅</a>
         <a class="btn ghost" :href="GITHUB_URL" target="_blank" rel="noopener">GitHub 关注</a>
       </div>
     </div>

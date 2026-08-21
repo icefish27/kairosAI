@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { usePosts } from '../composables/usePosts'
 
@@ -46,7 +47,7 @@ function onKey(e: KeyboardEvent) {
   }
   if (e.key === 'Enter') {
     const r = results.value[active.value]
-    if (r) window.location.href = r.url
+    if (r) window.location.href = withBase(r.url)
   }
 }
 onMounted(() => window.addEventListener('keydown', onKey))
@@ -80,7 +81,7 @@ function hl(text: string) {
           <a
             v-for="(r, i) in results"
             :key="r.url"
-            :href="r.url"
+            :href="withBase(r.url)"
             class="result"
             :class="{ on: i === active }"
             @click="close"

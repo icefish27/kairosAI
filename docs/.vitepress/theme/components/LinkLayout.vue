@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { useData } from 'vitepress'
 import { computed } from 'vue'
 
@@ -8,7 +9,7 @@ const fm = computed(() => frontmatter.value)
 
 <template>
   <div class="link-layout container">
-    <a class="back" href="/timeline">← 返回时间线</a>
+    <a class="back" :href="withBase('/timeline')">← 返回时间线</a>
 
     <header class="ll-head">
       <span v-if="fm.source" class="badge badge--accent">来源：{{ fm.source }}</span>
@@ -18,7 +19,7 @@ const fm = computed(() => frontmatter.value)
         <span v-if="fm.hot"> · 🔥{{ fm.hot }}</span>
       </div>
       <div v-if="fm.tags?.length" class="ll-tags">
-        <a v-for="t in fm.tags" :key="t" class="tag" :href="`/timeline?tag=${encodeURIComponent(t)}`">#{{ t }}</a>
+        <a v-for="t in fm.tags" :key="t" class="tag" :href="withBase(`/timeline?tag=${encodeURIComponent(t)}`)">#{{ t }}</a>
       </div>
     </header>
 

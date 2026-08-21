@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useData, useRoute } from 'vitepress'
+import { useData, useRoute, withBase } from 'vitepress'
 import PostLayout from './components/PostLayout.vue'
 import LinkLayout from './components/LinkLayout.vue'
 import NotFound from './components/NotFound.vue'
@@ -28,10 +28,10 @@ function toggleDark() {
 
 // 顶导航项
 const navItems = [
-  { text: '首页', link: '/' },
-  { text: 'AI 时间线', link: '/timeline' },
-  { text: '深度解析', link: '/deep' },
-  { text: '文章列表', link: '/articles' }
+  { text: '首页', link: withBase('/') },
+  { text: 'AI 时间线', link: withBase('/timeline') },
+  { text: '深度解析', link: withBase('/deep') },
+  { text: '文章列表', link: withBase('/articles') }
 ]
 
 // GitHub 仓库地址
@@ -52,7 +52,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     <!-- 顶导航 -->
     <header class="nav" :class="{ scrolled }">
       <div class="container nav-inner">
-        <a href="/" class="logo">
+        <a :href="withBase('/')" class="logo">
           <span class="logo-mark">AI</span>
           <span class="logo-text">资讯站</span>
         </a>
@@ -116,13 +116,13 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
           </div>
           <div class="footer-col">
             <h4>内容</h4>
-            <a href="/articles?view=tags">标签地图</a>
-            <a href="/timeline">时间线</a>
-            <a href="/articles?sort=hot">热门</a>
+            <a :href="withBase('/articles?view=tags')">标签地图</a>
+            <a :href="withBase('/timeline')">时间线</a>
+            <a :href="withBase('/articles?sort=hot')">热门</a>
           </div>
           <div class="footer-col">
             <h4>订阅</h4>
-            <a href="/rss.xml">RSS</a>
+            <a :href="withBase('/rss.xml')">RSS</a>
             <a :href="GITHUB_URL" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>

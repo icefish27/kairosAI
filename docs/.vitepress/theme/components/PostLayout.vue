@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { useData, withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import ArticleCard from './ArticleCard.vue'
@@ -18,7 +18,7 @@ const relatedPosts = computed(() => related(cur.value.url, cur.value.tags, 3))
 const headers = computed(() => (page.value.headers || []) as { level: number; title: string; link: string }[])
 
 // 返回链接
-const backHref = '/articles'
+const backHref = withBase('/articles')
 
 // TOC 滚动高亮
 const activeId = ref('')
@@ -63,7 +63,7 @@ onUnmounted(() => observer?.disconnect())
         <span v-if="meta?.hot">· 🔥{{ meta.hot }}</span>
       </div>
       <div class="post-tags">
-        <a v-for="t in (frontmatter.tags || [])" :key="t" class="tag" :href="`/articles?tag=${encodeURIComponent(t)}`">#{{ t }}</a>
+        <a v-for="t in (frontmatter.tags || [])" :key="t" class="tag" :href="withBase(`/articles?tag=${encodeURIComponent(t)}`)">#{{ t }}</a>
       </div>
       <img v-if="frontmatter.cover" class="post-cover" :src="frontmatter.cover" :alt="frontmatter.title" />
     </header>
@@ -92,12 +92,12 @@ onUnmounted(() => observer?.disconnect())
 
     <!-- 上下篇 -->
     <nav class="prev-next">
-      <a v-if="navi.prev" class="pn-link prev" :href="navi.prev.url">
+      <a v-if="navi.prev" class="pn-link prev" :href="withBase(navi.prev.url)">
         <span class="pn-label">← 上一篇</span>
         <span class="pn-title">{{ navi.prev.title }}</span>
       </a>
       <span v-else class="pn-link prev disabled"><span class="pn-label">← 上一篇</span><span class="pn-title">已是最早</span></span>
-      <a v-if="navi.next" class="pn-link next" :href="navi.next.url">
+      <a v-if="navi.next" class="pn-link next" :href="withBase(navi.next.url)">
         <span class="pn-label">下一篇 →</span>
         <span class="pn-title">{{ navi.next.title }}</span>
       </a>

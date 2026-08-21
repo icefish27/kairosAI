@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 import { computed } from 'vue'
 
@@ -26,7 +27,7 @@ const maxC = computed(() => tags.value[0]?.count || 1)
         :key="t.name"
         class="tag"
         :style="{ fontSize: size(t.count, maxC) }"
-        :href="`/articles?tag=${encodeURIComponent(t.name)}`"
+        :href="withBase(`/articles?tag=${encodeURIComponent(t.name)}`)"
       >{{ t.name }}<sup>{{ t.count }}</sup></a>
     </div>
   </section>

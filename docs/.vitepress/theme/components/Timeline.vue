@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 import { useDaily } from '../composables/useDaily'
 import { ref, computed } from 'vue'
@@ -138,7 +139,7 @@ const fmt = (d: string) => d.slice(5)
           v-for="p in g.items"
           :key="p.url"
           class="tcard"
-          :href="isDaily ? p.sourceUrl : p.url"
+          :href="isDaily ? p.sourceUrl : withBase(p.url)"
           :target="isDaily ? '_blank' : undefined"
           rel="noopener"
         >

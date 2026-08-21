@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 import { computed } from 'vue'
 
@@ -23,10 +24,10 @@ const fmt = (d: string) => d.slice(5)
   <section class="block">
     <div class="head">
       <h2>精选推荐</h2>
-      <a class="more" href="/articles">查看全部 →</a>
+      <a class="more" :href="withBase('/articles')">查看全部 →</a>
     </div>
     <div class="grid">
-      <a v-if="big" class="big" :href="big.url">
+      <a v-if="big" class="big" :href="withBase(big.url)">
         <div class="cover" :style="!big.cover ? { background: grad(big.title) } : {}">
           <img v-if="big.cover" :src="big.cover" :alt="big.title" loading="lazy" />
           <span class="cat">{{ big.category }}</span>
@@ -38,7 +39,7 @@ const fmt = (d: string) => d.slice(5)
         </div>
       </a>
       <div class="smalls">
-        <a v-for="p in smalls" :key="p.url" class="small" :href="p.url">
+        <a v-for="p in smalls" :key="p.url" class="small" :href="withBase(p.url)">
           <div class="cover" :style="!p.cover ? { background: grad(p.title) } : {}">
             <img v-if="p.cover" :src="p.cover" :alt="p.title" loading="lazy" />
             <span class="cat">{{ p.category }}</span>

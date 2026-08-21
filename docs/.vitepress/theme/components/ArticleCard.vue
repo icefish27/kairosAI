@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import type { Post } from '../posts.data'
 
 const props = defineProps<{ post: Post; showHot?: boolean }>()
@@ -13,7 +14,7 @@ const fmt = (d: string) => (d ? d.slice(5) : '')
 </script>
 
 <template>
-  <a class="acard" :href="props.post.url">
+  <a class="acard" :href="withBase(props.post.url)">
     <div class="cover" :style="!props.post.cover ? { background: gradient(props.post.title) } : {}">
       <img v-if="props.post.cover" :src="props.post.cover" :alt="props.post.title" loading="lazy" />
       <span class="cover-cat">{{ props.post.category }}</span>

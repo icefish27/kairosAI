@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { useRouter } from 'vitepress'
 const router = useRouter()
 function goHome() {
@@ -13,8 +14,8 @@ function goHome() {
     <p class="nf-desc">你访问的页面不存在，或者已被移除。</p>
     <div class="nf-actions">
       <button class="btn primary" @click="goHome">返回首页</button>
-      <a class="btn ghost" href="/timeline">看时间线</a>
-      <a class="btn ghost" href="/deep">深度解析</a>
+      <a class="btn ghost" :href="withBase('/timeline')">看时间线</a>
+      <a class="btn ghost" :href="withBase('/deep')">深度解析</a>
     </div>
   </div>
 </template>

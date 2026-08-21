@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 const { categories } = usePosts()
 </script>
@@ -13,7 +14,7 @@ const { categories } = usePosts()
         v-for="c in categories"
         :key="c.name"
         class="cat"
-        :href="`/articles?category=${encodeURIComponent(c.name)}`"
+        :href="withBase(`/articles?category=${encodeURIComponent(c.name)}`)"
       >
         <div class="cat-name">{{ c.name }}</div>
         <div class="cat-count">{{ c.count }} 篇</div>

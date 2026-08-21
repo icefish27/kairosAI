@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { usePosts } from '../composables/usePosts'
 import ArticleCard from './ArticleCard.vue'
 
@@ -10,7 +11,7 @@ const list = latest(9)
   <section class="block">
     <div class="head">
       <h2>最新资讯</h2>
-      <a class="more" href="/articles?sort=date">查看全部 →</a>
+      <a class="more" :href="withBase('/articles?sort=date')">查看全部 →</a>
     </div>
     <div class="grid">
       <ArticleCard v-for="p in list" :key="p.url" :post="p" />

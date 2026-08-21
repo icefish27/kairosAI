@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
 import { ref, onMounted, onUnmounted } from 'vue'
 import ParticlesBg from './ParticlesBg.vue'
 
@@ -94,8 +95,8 @@ onUnmounted(() => {
       <h1 class="hero-title">每日精选大模型<br />与 AI 行业前沿动态</h1>
       <p class="hero-sub">由 AI 驱动生产，文件驱动发布，零成本托管</p>
       <div class="hero-actions">
-        <a class="hero-cta btn primary" href="/articles">浏览文章</a>
-        <a class="hero-cta btn ghost" href="/timeline">查看时间线</a>
+        <a class="hero-cta btn primary" :href="withBase('/articles')">浏览文章</a>
+        <a class="hero-cta btn ghost" :href="withBase('/timeline')">查看时间线</a>
       </div>
       <div class="hero-scroll">↓ 继续滚动</div>
     </div>
